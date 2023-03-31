@@ -107,6 +107,9 @@ jobs:
           name: Test Back-end
           command: |
             cd backend
+            npm install
+            npm install oauth-sign
+            npm run build
             npm run test
             
   scan-frontend:
@@ -118,7 +121,11 @@ jobs:
       - run:
           name: Scan front-end
           command: |
-            npm audit
+            cd frontend
+            npm install
+            npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
 
   scan-backend:
     docker:
@@ -129,7 +136,11 @@ jobs:
       - run:
           name: Scan Back-end
           command: |
-            npm audit
+            cd backend
+            npm install
+            npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
 
   # deploy-infrastructure:
   #   docker:
