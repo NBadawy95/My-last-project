@@ -70,97 +70,97 @@ jobs:
       #     paths: [frontend/node_modules]
       #     key: frontend-build
 
-  build-backend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - run:
-          name: Back-end build
-          command: |
-            cd backend
-            npm install
-            npm run build
-
-  test-frontend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-
-      - run:
-          name: Test front-end
-          command: |
-            cd frontend
-            npm install
-            npm install oauth-sign
-            npm run build
-            npm run test
-                
-  test-backend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-
-      - run:
-          name: Test Back-end
-          command: |
-            cd backend
-            npm install
-            npm install oauth-sign
-            npm run build
-            npm run test
-            
-  scan-frontend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-
-      - run:
-          name: Scan front-end
-          command: |
-            exit 0
-            cd frontend
-            npm install
-            npm install oauth-sign@^0.9.0
-            npm audit fix --audit-level=critical --force
-            npm audit --audit-level=critical
-
-  scan-backend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-
-      - run:
-          name: Scan Back-end
-          command: |
-            exit 0
-            cd backend
-            npm install
-            npm install oauth-sign@^0.9.0
-            npm audit fix --audit-level=critical --force
-            npm audit --audit-level=critical
-
-  # deploy-infrastructure:
+  # build-backend:
   #   docker:
-  #     - image: amazon/aws-cli
+  #     - image: circleci/node:13.8.0
   #   steps:
   #     - checkout
   #     - run:
-  #         name: Install dependencies
+  #         name: Back-end build
   #         command: |
-  #           yum install -y tar gzip
-      # - run:
-      #     name: Ensure back-end infrastructure exists
-      #     command: |
-      #       aws cloudformation deploy \
-      #         --template-file .circleci/files/backend.yml \
-      #         --tags project=udapeople \
-      #         --stack-name "backend" \
-      #         --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:5}
+  #           cd backend
+  #           npm install
+  #           npm run build
+
+  # test-frontend:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+
+  #     - run:
+  #         name: Test front-end
+  #         command: |
+  #           cd frontend
+  #           npm install
+  #           npm install oauth-sign
+  #           npm run build
+  #           npm run test
+                
+  # test-backend:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+
+  #     - run:
+  #         name: Test Back-end
+  #         command: |
+  #           cd backend
+  #           npm install
+  #           npm install oauth-sign
+  #           npm run build
+  #           npm run test
+            
+  # scan-frontend:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+
+  #     - run:
+  #         name: Scan front-end
+  #         command: |
+  #           exit 0
+  #           cd frontend
+  #           npm install
+  #           npm install oauth-sign@^0.9.0
+  #           npm audit fix --audit-level=critical --force
+  #           npm audit --audit-level=critical
+
+  # scan-backend:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+
+  #     - run:
+  #         name: Scan Back-end
+  #         command: |
+  #           exit 0
+  #           cd backend
+  #           npm install
+  #           npm install oauth-sign@^0.9.0
+  #           npm audit fix --audit-level=critical --force
+  #           npm audit --audit-level=critical
+
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum install -y tar gzip
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              --tags project=udapeople \
+              --stack-name "backend" \
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:5}
 
       # - run:
       #     name: Ensure front-end infrastructure exist
@@ -170,15 +170,15 @@ jobs:
       #         --tags project=udapeople \
       #         --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:5}" \
       #         --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"
-      # - run:
-      #     name: Add back-end ip to ansible inventory
-      #     command: |
-      #       aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
 
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-            # - project/.circleci/ansible/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
 #       # Here's where you will add some code to rollback on failure      
       # - destroy_environment
   # configure-infrastructure:
@@ -187,7 +187,7 @@ jobs:
   #   steps:
   #     - checkout
   #     - add_ssh_keys:
-  #         fingerprints: ["0d:a0:d2:30:e7:40:31:70:0e:69:45:04:ad:36:0b:8c"]
+  #         fingerprints: ["83:fa:22:ba:99:fe:26:74:92:15:3d:b4:b2:82:a2:3a"]
   #     # - run:
       #     name: "Install Dependencies"
       #     command: |
@@ -254,7 +254,7 @@ jobs:
   #   steps:
   #     - checkout
   #     - add_ssh_keys:
-  #         fingerprints: ["0d:a0:d2:30:e7:40:31:70:0e:69:45:04:ad:36:0b:8c"]
+  #         fingerprints: ["83:fa:22:ba:99:fe:26:74:92:15:3d:b4:b2:82:a2:3a"]
   #     - run:
   #         name: Deploy backend
   #         command: |
@@ -349,21 +349,21 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      # - deploy-infrastructure:
-      #     # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      #     filters:
-      #       branches: 
-      #         only: [main]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
+      - deploy-infrastructure:
+      #      requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches: 
+              only: [main]
       # - configure-infrastructure
           # requires: [deploy-infrastructure]
       # - run-migrations
