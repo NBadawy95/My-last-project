@@ -66,83 +66,83 @@ jobs:
             cd frontend
             npm install
             npm run build:prod
-      # - save_cache:
-      #     paths: [frontend/node_modules]
-      #     key: frontend-build
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
 
-  # build-backend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Back-end build
-  #         command: |
-  #           cd backend
-  #           npm install
-  #           npm run build
+  build-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Back-end build
+          command: |
+            cd backend
+            npm install
+            npm run build
 
-  # test-frontend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
+  test-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
 
-  #     - run:
-  #         name: Test front-end
-  #         command: |
-  #           cd frontend
-  #           npm install
-  #           npm install oauth-sign
-  #           npm run build
-  #           npm run test
+      - run:
+          name: Test front-end
+          command: |
+            cd frontend
+            npm install
+            npm install oauth-sign
+            npm run build
+            npm run test
                 
-  # test-backend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
+  test-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
 
-  #     - run:
-  #         name: Test Back-end
-  #         command: |
-  #           cd backend
-  #           npm install
-  #           npm install oauth-sign
-  #           npm run build
-  #           npm run test
+      - run:
+          name: Test Back-end
+          command: |
+            cd backend
+            npm install
+            npm install oauth-sign
+            npm run build
+            npm run test
             
-  # scan-frontend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
 
-  #     - run:
-  #         name: Scan front-end
-  #         command: |
-  #           exit 0
-  #           cd frontend
-  #           npm install
-  #           npm install oauth-sign@^0.9.0
-  #           npm audit fix --audit-level=critical --force
-  #           npm audit --audit-level=critical
+      - run:
+          name: Scan front-end
+          command: |
+            exit 0
+            cd frontend
+            npm install
+            npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
 
-  # scan-backend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
+  scan-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
 
-  #     - run:
-  #         name: Scan Back-end
-  #         command: |
-  #           exit 0
-  #           cd backend
-  #           npm install
-  #           npm install oauth-sign@^0.9.0
-  #           npm audit fix --audit-level=critical --force
-  #           npm audit --audit-level=critical
+      - run:
+          name: Scan Back-end
+          command: |
+            exit 0
+            cd backend
+            npm install
+            npm install oauth-sign@^0.9.0
+            npm audit fix --audit-level=critical --force
+            npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
@@ -170,6 +170,7 @@ jobs:
       #         --tags project=udapeople \
       #         --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:5}" \
       #         --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:5}"
+      
       - run:
           name: Add back-end ip to ansible inventory
           command: |
