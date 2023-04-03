@@ -180,31 +180,31 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-#       # Here's where you will add some code to rollback on failure      
+      # Here's where you will add some code to rollback on failure      
       # - destroy_environment
-  # configure-infrastructure:
-  #   docker:
-  #     - image: mareimorsy/aws-node
-  #   steps:
-  #     - checkout
-  #     - add_ssh_keys:
-  #         fingerprints: ["83:fa:22:ba:99:fe:26:74:92:15:3d:b4:b2:82:a2:3a"]
-  #     # - run:
+  configure-infrastructure:
+    docker:
+      - image: mareimorsy/aws-node
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["83:fa:22:ba:99:fe:26:74:92:15:3d:b4:b2:82:a2:3a"]
+      # - run:
       #     name: "Install Dependencies"
       #     command: |
       #       apk add ansible gzip openssh-client
-      # - attach_workspace:
-      #     at: ~/
-      # - run:
-      #     name: Configure server
-      #     command: |
-      #       ls
-      #       pwd
-      #       cd .circleci/ansible
-      #       aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt
-      #       cat inventory.txt
-      #       # ansible-playbook -i inventory.txt configure-server.yml -vv
-      #       ansible-playbook -i inventory.txt prometheus-exporter.yml -vv
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Configure server
+          command: |
+            ls
+            pwd
+            cd .circleci/ansible
+            aws ec2 describe-instances --region us-east-1 --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> inventory.txt
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.yml -vv
+          # ansible-playbook -i inventory.txt prometheus-exporter.yml -vv
       # Here's where you will add some code to rollback on failure      
 
   # run-migrations:
@@ -365,8 +365,8 @@ workflows:
           # filters:
           #   branches: 
           #     only: [main]
-      # - configure-infrastructure
-          # requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations
           # requires: [configure-infrastructure]
       # - deploy-frontend:
