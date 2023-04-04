@@ -300,7 +300,7 @@ jobs:
               echo "Rolling Back"
               exit 1
             fi
-      - notify_on_failure
+      # - notify_on_failure
   #     - destroy_environment
 
   # cloudfront-update:
