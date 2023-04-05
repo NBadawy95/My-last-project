@@ -341,9 +341,11 @@ jobs:
             echo Old Workflow ID: $OldWorkflowID 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-              aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
+              aws s3 rm "s3:udapeople-9792e" --recursive
+              aws s3 rm "s3:udapeople-5dec5" --recursive
+              aws cloudformation delete-stack --stack-name "backend"
+              aws cloudformation delete-stack --stack-name "frontend-9792e"
+              aws cloudformation delete-stack --stack-name "InitialStack"
             fi
             
 
@@ -375,7 +377,7 @@ workflows:
           # requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend]
-      - cloudfront-update
+      # - cloudfront-update
       #     requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
+      - cleanup
+          # requires: [cloudfront-update]
