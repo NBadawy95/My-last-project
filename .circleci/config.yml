@@ -155,7 +155,7 @@ jobs:
       - run:
           name: Ensure back-end infrastructure exists
           command: |
-            aws cloudformation create \
+            aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=My-last-project \
               --stack-name "backstack" \
