@@ -1,0 +1,8 @@
+1. Public Url to GitHub repository (not private) [URL01]
+    https://github.com/NBadawy95/My-last-project
+
+2. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
+    http://udapeople-3523d.s3-website-us-east-1.amazonaws.com/#/employees
+
+3. deployed and functioning front-end application in CloudFront. [URL03_SCREENSHOT]
+    https://d1rba1s87gb5k2.cloudfront.net/#/employees
